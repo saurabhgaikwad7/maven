@@ -1,0 +1,166 @@
+✅ 1. Create a Maven Web Project
+
+Open a terminal in a clean folder (not OneDrive, Desktop, Documents).
+
+cd C:\Dev
+
+
+Run:
+
+mvn archetype:generate -DarchetypeGroupId=org.apache.maven.archetypes -DarchetypeArtifactId=maven-archetype-webapp -DarchetypeVersion=1.4 -DgroupId=com.blogsite -DartifactId=blog-website -DinteractiveMode=false
+
+
+This will generate:
+
+blog-website/
+ ├─ src/
+ │   └─ main/
+ │       └─ webapp/
+ │            ├─ index.jsp
+ │            └─ WEB-INF/web.xml
+ ├─ pom.xml
+
+✅ 2. Design a Two-Page Blog Website
+
+We will use:
+
+index.jsp → Homepage, blog entries list
+
+post.jsp → Blog detail post
+
+📌 Modify src/main/webapp/index.jsp
+
+Replace existing content with:
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Blog</title>
+    <style>
+        body { font-family: Arial; margin: 40px; }
+        .post { padding: 10px; border: 1px solid #ddd; margin-bottom: 10px; }
+        a { text-decoration: none; color: #1e88e5; }
+    </style>
+</head>
+<body>
+    <h1>Welcome to My Blog</h1>
+    <div class="post">
+        <h2><a href="post.jsp?title=My%20First%20Blog">My First Blog</a></h2>
+        <p>This is my first blog post. Click to read more.</p>
+    </div>
+    <div class="post">
+        <h2><a href="post.jsp?title=Second%20Post">Second Post</a></h2>
+        <p>This is another blog post.</p>
+    </div>
+</body>
+</html>
+
+📌 Create src/main/webapp/post.jsp
+<!DOCTYPE html>
+<html>
+<head>
+    <title><%= request.getParameter("title") %></title>
+    <style>
+        body { font-family: Arial; margin: 40px; }
+        a { text-decoration: none; color: #1e88e5; }
+    </style>
+</head>
+<body>
+    <h1><%= request.getParameter("title") %></h1>
+    <p>
+        This is the content of your blog post.
+    </p>
+    <a href="index.jsp">← Back to Home</a>
+</body>
+</html>
+
+✅ 3. Configure Maven (pom.xml)
+
+Open pom.xml and update it like below:
+
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+          https://maven.apache.org/maven-v4_0_0.xsd">
+    
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.blogsite</groupId>
+    <artifactId>blog-website</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>war</packaging>
+
+    <properties>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+    </properties>
+
+    <dependencies>
+        <!-- Servlet API -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>4.0.1</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+
+</project>
+
+
+This makes Maven:
+
+✔ Manage dependencies
+✔ Build WAR deployable file
+✔ Compatible with Tomcat
+
+✅ 4. Build the project using Maven
+
+Enter your project folder:
+
+cd blog-website
+
+
+Clean + compile:
+
+mvn clean install
+
+
+👉 The .war file will be created here:
+
+target/blog-website.war
+
+
+This is your deployable build artifact.
+
+🧩 5. Deploy on Tomcat (Local Testing)
+
+Copy the .war file into:
+
+<CATALINA_HOME>/webapps
+
+
+Start Tomcat
+
+startup.bat
+
+
+Open in browser:
+
+👉 http://localhost:8080/blog-website/
+
+You should see the blog homepage.
+
+🟢 6. Push Code to GitHub
+Create a Git repo
+cd blog-website
+git init
+git add .
+git commit -m "Initial Maven Blog Website"
+
+Create a new repo on GitHub
+
+Then connect:
+
+git remote add origin https://github.com/<USERNAME>/blog-website.git
+git push -u origin main
